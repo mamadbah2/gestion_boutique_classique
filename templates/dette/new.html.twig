@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une nouvelle dette{% endblock %}
+
+{% block body %}
+    <!-- Header -->
+    <header class="bg-[#1E375A] text-white p-4">
+        <h1 class="text-3xl font-bold">Créer une nouvelle dette</h1>
+    </header>
+
+    <div class="flex flex-1 h-[850px]">
+        <!-- Sidebar -->
+        <twig:Navigation />
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4">
+            <div class="container mx-auto px-4 py-8 bg-white shadow-md rounded">
+                {{ form_start(form, {'attr': {'class': 'px-8 pt-6 pb-8'}}) }}
+                    <div class="mb-4">
+                        {{ form_label(form.data, null, {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+                        {{ form_widget(form.data, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                        {{ form_errors(form.data) }}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_label(form.client, null, {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+                        {{ form_widget(form.client, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                        {{ form_errors(form.client) }}
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="block text-gray-700 text-sm font-bold mb-2">Articles</h3>
+                        <div id="detail-article-dette-list"
+                             data-prototype="{{ form_widget(form.detailArticleDettes.vars.prototype)|e('html_attr') }}"
+                             data-widget-tags="{{ '<div class="mb-2"></div>'|e }}"
+                             data-widget-counter="{{ form.detailArticleDettes|length }}">
+                            {% for detailArticleDetteForm in form.detailArticleDettes %}
+                                <div class="mb-2">
+                                    {{ form_widget(detailArticleDetteForm) }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2" 
+                                id="add-another-article">
+                            Ajouter un article
+                        </button>
+                    </div>
+
+                    <div class="mb-6">
+                        {{ form_label(form.montantVerser, null, {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+                        {{ form_widget(form.montantVerser, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                        {{ form_errors(form.montantVerser) }}
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                            Créer la dette
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#1E375A] text-white p-4 text-center">
+        <p>&copy; 2023 Gestion des Dettes. Tous droits réservés.</p>
+    </footer>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var detailList = document.querySelector('#detail-article-dette-list');
+    var addButton = document.querySelector('#add-another-article');
+
+    addButton.addEventListener('click', function() {
+        var prototype = detailList.dataset.prototype;
+        var index = detailList.dataset.widgetCounter;
+        var newForm = prototype.replace(/__name__/g, index);
+        detailList.dataset.widgetCounter = parseInt(index) + 1;
+
+        var newElement = document.createElement('div');
+        newElement.innerHTML = newForm;
+        newElement.classList.add('mb-2');
+        detailList.appendChild(newElement);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Dettes{% endblock %}
+
+{% block body %}
+    <!-- Header -->
+    <header class="bg-[#1E375A] text-white p-4">
+        <h1 class="text-2xl font-bold">Gestion des Dettes</h1>
+    </header>
+
+    <div class="flex flex-1 h-[850px]">
+        <!-- Sidebar -->
+    <twig:Navigation />
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4">
+            <div class="w-full">
+                <h2 class="text-xl font-semibold mb-4">Liste des dettes</h2>
+
+                {# <div class="mb-4">
+                    {{ form_start(form,  {'attr': {'class': 'flex justify-around'}})}}
+                    {{ form_errors(form.client) }}
+                    {{ form_widget(form.client) }}
+                    {{ form_widget(form.status) }}
+                    {{ form_widget(form.Search) }}
+                    {{ form_end(form) }}
+                </div> #}
+
+                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="px-4 py-2 text-left">Date</th>
+                                <th class="px-4 py-2 text-left">Client</th>
+                                <th class="px-4 py-2 text-left">Montant</th>
+                                <th class="px-4 py-2 text-left">Montant Versé</th>
+                                <th class="px-4 py-2 text-left">Montant Restant</th>
+                                <th class="px-4 py-2 text-left">Statut</th>
+                                <th class="px-4 py-2 text-left">Payement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dette in dettes %}
+                                <tr class="border-b">
+                                    <td class="px-4 py-2">{{ dette.data|date('Y-m-d') }}</td>
+                                    <td class="px-4 py-2">{{ dette.client.surname }}</td>
+                                    <td class="px-4 py-2">{{ dette.montant }} F</td>
+                                    <td class="px-4 py-2">{{ dette.montantVerser }} F</td>
+                                    <td class="px-4 py-2">{{ dette.montant - dette.montantVerser > 0 ? dette.montant - dette.montantVerser : 0 }} F</td>
+
+                                    <td class="px-4 py-2">
+                                        <span class="px-2 py-1 rounded {% if dette.status == constant('App\\Enum\\StatusDette::Paye') %}bg-green-200 text-green-800{% elseif dette.status == constant('App\\Enum\\StatusDette::Impaye') %}bg-yellow-200 text-yellow-800{% else %}bg-red-200 text-red-800{% endif %}">
+                                            {{ dette.status.value }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        {% if dette.status != constant('App\\Enum\\StatusDette::Paye') %}
+                                            <form action="{{ path('app_dette_payment', {'id': dette.id}) }}" method="post" class="flex items-center">
+                                                <input type="number" name="payement[montant]" required min="1" max="{{ dette.montant - dette.montantVerser }}" class="w-20 p-1 border rounded mr-2">
+                                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+                                                    Payer
+                                                </button>
+                                            </form>
+                                        {% else %}
+                                            <span class="text-green-600">Payé</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" class="px-4 py-2 text-center">Aucune dette trouvée.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="mt-4 flex justify-center">
+                        <nav class="inline-flex rounded-md shadow">
+                            {% if page > 1 %}
+                                <a href="?page={{ page - 1 }}" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <<<
+                                </a>
+                            {% endif %}
+
+                            {% for i in 1..maxPage %}
+                                <a href="?page={{ i }}" class="px-3 py-2 border-t border-b border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 {% if i == page %}bg-blue-100{% endif %}">
+                                    {{ i }}
+                                </a>
+                            {% endfor %}
+
+                            {% if page < maxPage %}
+                                <a href="?page={{ page + 1 }}" class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    >>>
+                                </a>
+                            {% endif %}
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#1E375A] text-white p-4 text-center">
+        <p>&copy; 2023 Gestion des Dettes. Tous droits réservés.</p>
+    </footer>
+{% endblock %}
+

@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvel Article{% endblock %}
+
+{% block body %}
+    <!-- Header -->
+    <header class="bg-[#1E375A] text-white p-4">
+        <h1 class="text-2xl font-bold">Création d'un Article</h1>
+    </header>
+
+    <div class="flex flex-1 h-[850px]">
+        <!-- Sidebar -->
+        <nav class="w-64 bg-[#1E375A] text-white p-4">
+            <ul>
+                <li class="mb-2">
+                    <a href="#" class="hover:text-gray-300">Tableau de bord</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/client" class="hover:text-gray-300">Clients</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/dettes" class="hover:text-gray-300">Dettes</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/dette/new" class="hover:text-gray-300">Nouvelle dette</a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" class="hover:text-gray-300">Commandes</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4">
+            <div class="max-w-2xl mx-auto">
+                {{ form_start(form, {'attr': {'class': 'bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'}}) }}
+                    <div class="mb-4">
+                        {% for field in form.children %}
+                            <div class="mb-4">
+                                {{ form_label(field, null, {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+                                {{ form_widget(field, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                                <div class="text-red-500 text-xs italic">
+                                    {{ form_errors(field) }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="flex items-center justify-between mt-6">
+                        <button class="bg-[#1E375A] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                            Créer l'article
+                        </button>
+                        <a href="{{ path('app_article_index') }}" class="flex items-center text-[#1E375A] hover:text-blue-700 font-bold">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                            </svg>
+                            Retour à la liste
+                        </a>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#1E375A] text-white p-4 text-center">
+        <p>&copy; 2023 Gestion des Articles. Tous droits réservés.</p>
+    </footer>
+{% endblock %}

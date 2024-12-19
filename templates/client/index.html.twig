@@ -1,0 +1,202 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ClientController!
+{% endblock %}
+
+{% block body %}
+	<!-- Header -->
+	<header class="bg-[#1E375A] text-white p-4">
+		<h1 class="text-2xl font-bold">Gestion des Clients</h1>
+	</header>
+
+	<div
+		class="flex flex-1 h-[850px]">
+		<!-- Sidebar -->
+		<twig:Navigation />
+
+		<!-- Main Content -->
+		<main class="flex-1 p-4">
+			<div
+				class="flex gap-4">
+				<!-- Client Creation Form -->
+				<div class="w-1/2">
+					<h2 class="text-xl font-semibold mb-4 ">Créer un nouveau client</h2>
+					<form id="form_client" class="bg-white shadow-md rounded px-8 pt-6  mb-4" method="post" action="{{ path('client_new') }}">
+						{{ form_start(form) }}
+
+						<div class="mb-1">
+							{{ form_label(form.surname) }}
+							{{ form_widget(form.surname) }}
+							<div class="text-red-500 text-xs italic">
+								{{ form_errors(form.surname) }}
+							</div>
+						</div>
+
+						<div class="mb-1">
+							{{ form_label(form.telephone) }}
+							{{ form_widget(form.telephone) }}
+							<div class="text-red-500 text-xs italic">
+								{{ form_errors(form.telephone) }}
+							</div>
+						</div>
+
+						<div class="mb-1">
+							{{ form_label(form.adresse) }}
+							{{ form_widget(form.adresse) }}
+							<div class="text-red-500 text-xs italic">
+								{{ form_errors(form.adresse) }}
+							</div>
+						</div>
+						{# {{ form_start(form.account) }} #}
+
+						<div class="mb-1">
+							{{ form_label(form.addAccount) }}
+							{{ form_widget(form.addAccount) }}
+							<div
+								class="text-red-500 text-xs italic">{# {{ form_errors(form.adresse) }} #}
+							</div>
+						</div>
+						<div id="form_user">
+							<div class="mb-1">
+								{% if form.account is defined %}
+									{{ form_label(form.account.nom) }}
+									{{ form_widget(form.account.nom) }}
+								{% endif %}
+								{% if error_user is defined and error_user.nom is not null %}
+									<div class="text-red-500 text-xs italic">{{ error_user.nom }}</div>
+								{% endif %}
+							</div>
+
+							<div class="mb-1">
+								{% if form.account is defined %}
+									{{ form_label(form.account.prenom) }}
+									{{ form_widget(form.account.prenom) }}
+								{% endif %}
+								{% if error_user is defined and error_user.prenom is not null %}
+									<div class="text-red-500 text-xs italic">{{ error_user.prenom }}</div>
+								{% endif %}
+							</div>
+
+							<div class="mb-1">
+								{% if form.account is defined %}
+									{{ form_label(form.account.login) }}
+									{{ form_widget(form.account.login) }}
+								{% endif %}
+							</div>
+
+							<div class="mb-1">
+								{% if form.account is defined %}
+									{{ form_label(form.account.password) }}
+									{{ form_widget(form.account.password) }}
+								{% endif %}
+							</div>
+
+							{# <div class="mb-4">
+								{% if form.account is defined %}
+									{{ form_label(form.account.isActive) }}
+									{{ form_widget(form.account.isActive) }}
+								{% endif %}
+							</div> #}
+						</div>
+
+
+						{# {{ form_end(form.account) }} #}
+
+
+						<div class="flex items-center justify-between">
+							<button class="bg-[#1E375A] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+								Créer le client
+							</button>
+						</div>
+
+						{{ form_end(form) }}
+					</form>
+
+				</div>
+
+				<!-- Client List -->
+				<div class="w-1/2">
+					<h2 class="text-xl font-semibold  mb-4">Liste des clients</h2>
+
+
+					<div class="mb-4 ">
+						{{form_start(formSearch,  {'attr': {'class': 'flex justify-around'}})}}
+						{{form_errors(formSearch.telephone)}}
+						{{ form_widget(formSearch.telephone) }}
+						{{ form_widget(formSearch.surname) }}
+
+						{{ form_widget(formSearch.Search) }}
+						{{ form_end(formSearch) }}
+						{# <input type="text" placeholder="Rechercher par téléphone" class="w-full p-2 border rounded"> #}
+					</div>
+					<div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+						<ul>
+							{% for client in clients %}
+								<li class="mb-2 pb-2 border-b flex justify-between items-start">
+									<div>
+										<div class="font-bold">{{ client.surname }}</div>
+										<div class="text-sm text-gray-600">Téléphone:
+											{{ client.telephone }}</div>
+
+
+										<div class="text-sm text-gray-600">Adresse:
+											{{ client.adresse }}</div>
+										{% if client.account %}
+											<div class="text-sm text-gray-600">Login:
+												{{  client.account.login }}</div>
+												
+										{% endif %}
+
+									</div>
+									<div class="flex items-center">
+										<a href="{{ path('dettesbyClient', {'idClient' :client.id})}}" class="text-blue-500 hover:text-blue-700 mr-2" title="Voir les dettes">
+											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+												<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/>
+											</svg>
+										</a>
+										<button class="text-red-500 hover:text-red-700" title="Supprimer le client">
+											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+												<path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
+											</svg>
+										</button>
+									</div>
+								</li>
+							{% else %}
+								<li class="mb-2 pb-2 border-b">Aucun client trouvé.</li>
+							{% endfor %}
+						</ul>
+
+
+						<div class="mt-4 flex justify-center">
+						<nav class="inline-flex rounded-md shadow">
+								 {% if page > 1 %}
+                                 <a href="{{ path('app_client', { page: page - 1 }) }}" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <<< 
+                                </a>
+								{% endif %}
+
+								{% for i in 1..maxPage %}
+                                  <a href="{{ path('app_client', { page: i}) }}" class="px-3 py-2 border-t border-b border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                    {{ i }}
+                                </a>
+								{% endfor %}
+                                {% if page <  maxPage %}
+                                  <a href="{{ path('app_client', { page: page + 1 }) }}" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    >>> 
+                                </a>
+								{% endif %}
+							</nav>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</main>
+	</div>
+
+	<!-- Footer -->
+	<footer class="bg-[#1E375A]  text-white p-4 text-center">
+		<p>&copy; 2023 Gestion des Clients. Tous droits réservés.</p>
+	</footer>
+
+{% endblock %}

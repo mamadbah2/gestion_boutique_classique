@@ -1,0 +1,95 @@
+<div{{attributes}}>
+		<h2 class="text-xl font-semibold mb-4 ">Créer un nouveau client</h2>
+		<form id="form_client" class="bg-white shadow-md rounded px-8 pt-6  mb-4" method="post" action="{{ path('client_new') }}">
+			{{ form_start(form) }}
+
+			<div class="mb-1">
+				{{ form_label(form.surname) }}
+				{{ form_widget(form.surname) }}
+				<div class="text-red-500 text-xs italic">
+					{{ form_errors(form.surname) }}
+				</div>
+			</div>
+
+			<div class="mb-1">
+				{{ form_label(form.telephone) }}
+				{{ form_widget(form.telephone) }}
+				<div class="text-red-500 text-xs italic">
+					{{ form_errors(form.telephone) }}
+				</div>
+			</div>
+
+			<div class="mb-1">
+				{{ form_label(form.adresse) }}
+				{{ form_widget(form.adresse) }}
+				<div class="text-red-500 text-xs italic">
+					{{ form_errors(form.adresse) }}
+				</div>
+			</div>
+			{# {{ form_start(form.account) }} #}
+
+			<div class="mb-1">
+				{{ form_label(form.addAccount) }}
+				{{ form_widget(form.addAccount) }}
+				<div
+					class="text-red-500 text-xs italic">{# {{ form_errors(form.adresse) }} #}
+				</div>
+			</div>
+			<div id="form_user">
+				<div class="mb-1">
+					{% if form.account is defined %}
+						{{ form_label(form.account.nom) }}
+						{{ form_widget(form.account.nom) }}
+					{% endif %}
+					{% if error_user is defined and error_user.nom is not null %}
+						<div class="text-red-500 text-xs italic">{{ error_user.nom }}</div>
+					{% endif %}
+				</div>
+
+				<div class="mb-1">
+					{% if form.account is defined %}
+						{{ form_label(form.account.prenom) }}
+						{{ form_widget(form.account.prenom) }}
+					{% endif %}
+					{% if error_user is defined and error_user.prenom is not null  %}
+						<div class="text-red-500 text-xs italic">{{ error_user.prenom }}</div>
+					{% endif %}
+				</div>
+
+				<div class="mb-1">
+					{% if form.account is defined %}
+						{{ form_label(form.account.login) }}
+						{{ form_widget(form.account.login) }}
+					{% endif %}
+				</div>
+
+				<div class="mb-1">
+					{% if form.account is defined %}
+						{{ form_label(form.account.password) }}
+						{{ form_widget(form.account.password) }}
+					{% endif %}
+				</div>
+
+				<div class="mb-4">
+					{% if form.account is defined %}
+						{{ form_label(form.account.isActive) }}
+						{{ form_widget(form.account.isActive) }}
+					{% endif %}
+				</div>
+			</div>
+
+
+			{# {{ form_end(form.account) }} #}
+
+
+			<div class="flex items-center justify-between">
+				<button class="bg-[#1E375A] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+					Créer le client
+				</button>
+			</div>
+
+			{{ form_end(form) }}
+		</form>
+
+
+</div>

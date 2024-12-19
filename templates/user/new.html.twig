@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un nouvel utilisateur{% endblock %}
+
+{% block body %}
+    <!-- Header -->
+    <header class="bg-[#1E375A] text-white p-4">
+        <h1 class="text-3xl font-bold">Créer un nouvel utilisateur</h1>
+    </header>
+
+    <div class="flex flex-1 h-[850px]">
+        <!-- Sidebar -->
+        <twig:Navigation />
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4">
+            <div class="container mx-auto px-4 py-8 bg-white shadow-md rounded">
+                {{ form_start(form, {'attr': {'class': 'px-8 pt-6 pb-8'}}) }}
+
+                <div class="mb-4">
+                    {{ form_label(form.nom, null, {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+                    {{ form_widget(form.nom, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                    {{ form_errors(form.nom) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.prenom, null, {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+                    {{ form_widget(form.prenom, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                    {{ form_errors(form.prenom) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.login, null, {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+                    {{ form_widget(form.login, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                    {{ form_errors(form.login) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.password, null, {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+                    {{ form_widget(form.password, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                    {{ form_errors(form.password) }}
+                </div>
+
+                {# <div class="mb-4">
+                    {{ form_label(form.isActive, null, {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+                    {{ form_widget(form.isActive, {'attr': {'class': 'shadow border rounded py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline'}}) }}
+                    {{ form_errors(form.isActive) }}
+                </div> #}
+
+                <div class="flex items-center justify-between">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                        Créer l'utilisateur
+                    </button>
+                    <a href="{{ path('app_user_index') }}" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+                        Retour à la liste
+                    </a>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#1E375A] text-white p-4 text-center">
+        <p>&copy; 2023 Gestion des utilisateurs. Tous droits réservés.</p>
+    </footer>
+{% endblock %}

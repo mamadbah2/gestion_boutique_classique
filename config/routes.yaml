@@ -1,0 +1,7 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+# live_component:
+#     resource : '@LiveComponentBundle/Ressources/config/routing/live_component.xml'

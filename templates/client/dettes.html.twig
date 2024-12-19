@@ -1,0 +1,251 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ClientController!
+{% endblock %}
+
+{% block body %}
+{% set restant = 0%}
+	<!-- Header -->
+	<header class="bg-[#1E375A] text-white p-4">
+		<h1 class="text-2xl font-bold">Gestion des Clients</h1>
+	</header>
+
+	<div
+		class="flex flex-1 h-[850px]">
+		<!-- Sidebar -->
+        <twig:Navigation />
+
+		<!-- Main Content -->
+		<main class="flex-1 p-4">
+			<div class="container mx-auto px-4">
+				<h1 class="text-3xl font-bold  mb-6">Dettes du client</h1>
+
+				<!-- Informations du client -->
+				<div class="bg-white shadow-md rounded-lg p-6 mb-6">
+					<h2 class="text-xl font-semibold  mb-4">Informations du client</h2>
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div>
+							<p class="text-sm font-medium text-gray-600">Surname</p>
+							<p class="text-lg">{{client.surname}}</p>
+						</div>
+
+						<div>
+							<p class="text-sm font-medium text-gray-600">Téléphone</p>
+							<p class="text-lg">{{client.telephone}}</p>
+						</div>
+						<div>
+							<p class="text-sm font-medium text-gray-600">Adresse</p>
+							<p class="text-lg">{{client.adresse}}</p>
+						</div>
+					</div>
+				</div>
+				<div class="mb-4">
+				{{form_start(form, {'attr': {'class': 'flex , justify-start'}}, { method: "GET" })}}
+				{{ form_widget(form.status) }}
+				{{ form_end(form) }}
+					{# <button id="all" class="bg-[#1E375A] text-white px-4 py-2 rounded mr-2">Toutes</button>
+					<button id="unpaid" class="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">Impayees</button>
+					<button id="paid" class="bg-gray-300 text-gray-700 px-4 py-2 rounded">Payees</button> #}
+				</div>
+				<!-- Tableau des dettes -->
+				<div class="overflow-x-auto bg-white shadow-md rounded-lg">
+					<div class="mb-4 ">
+					{# {{form_start(form,  {'attr': {'class': 'flex justify-around'}})}}
+						{{form_errors(form.status)}}
+						{{ form_widget(form.status) }}
+						{{ form_widget(form.Search) }}
+						{{ form_end(form) }} #}
+						{# <input type="text" placeholder="Rechercher par téléphone" class="w-full p-2 border rounded"> #}
+					</div>
+					<table class="min-w-full leading-normal">
+                    <thead>
+                        <tr>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                ID
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Date
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Montant
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Montant Versé
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Détails
+                            </th>
+							<th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Payement
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dette in dettes %}
+                            {% set restant = restant + (dette.montant - dette.montantVerser) %}
+                            <tr class="dette-row" data-dette-id="{{ dette.id }}">
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{dette.id}}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{dette.data ? dette.data|date('Y-m-d') : 'N/A'}}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{dette.montant}}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{dette.montantVerser}}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold {% if dette.montant == dette.montantVerser %}text-green-900{% else %}text-red-900{% endif %} leading-tight">
+                                        <span aria-hidden class="absolute inset-0 {% if dette.montant == dette.montantVerser %}bg-green-200{% else %}bg-red-200{% endif %} opacity-50 rounded-full"></span>
+                                        <span class="relative">{{dette.montant == dette.montantVerser ? "Payé" : "Impayé"}}</span>
+                                    </span>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <button class="toggle-details bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        Voir détails
+                                    </button>
+                                </td>
+
+								 <td class="px-4 py-2">
+                                        {% if dette.status != constant('App\\Enum\\StatusDette::Paye') %}
+                                            <form action="{{ path('app_detteClient_payment', {'id': dette.id}) }}" method="post" class="flex items-center">
+                                                <input type="number" name="payement[montant]" required min="1" max="{{ dette.montant - dette.montantVerser }}" class="w-20 p-1 border rounded mr-2">
+                                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+                                                    Payer
+                                                </button>
+                                            </form>
+                                        {% else %}
+                                            <span class="text-green-600">Payé</span>
+                                        {% endif %}
+                                    </td>
+                            </tr>
+                            <tr class="dette-details hidden" data-dette-id="{{ dette.id }}">
+                                <td colspan="6" class="px-5 py-5 border-b border-gray-200 bg-gray-50">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <h3 class="font-bold text-lg mb-2">Articles</h3>
+                                            <table class="min-w-full">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="px-4 py-2 text-left">Nom</th>
+                                                        <th class="px-4 py-2 text-left">Quantité</th>
+                                                        <th class="px-4 py-2 text-left">Prix</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for detailArticle in dette.detailArticleDettes %}
+                                                        <tr>
+                                                            <td class="px-4 py-2">{{ detailArticle.article.libelle }}</td>
+                                                            <td class="px-4 py-2">{{ detailArticle.qte }}</td>
+                                                            <td class="px-4 py-2">{{ detailArticle.total }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-lg mb-2">Paiements</h3>
+                                            <table class="min-w-full">
+                                                <thead>
+                                                    <tr>
+                                                        {# <th class="px-4 py-2 text-left">Date</th> #}
+                                                        <th class="px-4 py-2 text-left">Montant</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for payement in dette.payements %}
+                                                        <tr>
+                                                            {# <td class="px-4 py-2">{{ payement.date|date('Y-m-d') }}</td> #}
+                                                            <td class="px-4 py-2">{{ payement.montant }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+					
+				</div>
+				      <div class="mt-4 flex justify-center">
+							<nav class="inline-flex rounded-md shadow">
+								 {% if page > 1 %}
+                                <a href="?page={{page - 1}}&statuts={{statuts}} " class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <<< 
+                                </a>
+								{% endif %}
+
+								{% for i in 1..maxPage %}
+									<a href="?page={{i}}&statuts={{statuts}} " class="px-3 py-2 border-t border-b border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+										{{ i }}
+									</a>
+								{% endfor %}
+                                {% if page <  maxPage %}
+                                <a href="?page={{page + 1}}&statuts={{statuts}} " class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    >>> 
+                                </a>
+								{% endif %}
+							</nav>
+						</div>
+				<div class="mt-4 flex justify-end">
+					<p class="text-xl font-semibold ">Total restant à payer :
+						<span class="text-red-600"> {{restant}} Fcfa</span>
+					</p>
+				</div>
+				
+			</div>
+			
+		</main>
+	</div>
+
+	<!-- Footer -->
+	<footer class="bg-[#1E375A] text-white p-4 text-center">
+		<p>&copy; 2023 Gestion des Clients. Tous droits réservés.</p>
+	</footer>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButtons = document.querySelectorAll('.toggle-details');
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const detteId = this.closest('tr').dataset.detteId;
+            const detailsRow = document.querySelector(`.dette-details[data-dette-id="${detteId}"]`);
+            detailsRow.classList.toggle('hidden');
+            this.textContent = detailsRow.classList.contains('hidden') ? 'Voir détails' : 'Cacher détails';
+        });
+    });
+});
+</script>
+{% endblock %}
+
